@@ -1,0 +1,3 @@
+These are the login details of DSM application 
+ username :: PARAMPUJYA 
+ password ::pbkdf2_sha256$180000$OYZhNeI1Jqjc$xNaXp+4z3iAdnBc1tGhrfxh76yJj6inBHmAV/VU83aM=

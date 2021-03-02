@@ -1,0 +1,3 @@
+These are the login details of DSM application 
+ username :: santhosh 
+ password ::pbkdf2_sha256$180000$yUVuVJtJQNbF$PSPgOlmqjYiyFD3GQVX0XMgZnXntmIeUCCC0dH7C8TY=

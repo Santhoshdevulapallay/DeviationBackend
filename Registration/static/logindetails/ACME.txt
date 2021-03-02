@@ -1,0 +1,3 @@
+These are the login details of DSM application 
+ username :: ACME 
+ password ::pbkdf2_sha256$180000$EyFUkcHiGXXv$5lBH4ext0Kyu+9J6y1VAChEZn5rZIGU3nC0FmyazkUI=

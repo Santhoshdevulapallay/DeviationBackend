@@ -1,0 +1,3 @@
+These are the login details of DSM application 
+ username :: ADYAH 
+ password ::pbkdf2_sha256$180000$H5eNyM3Gb6SL$UejftocBO6rFtDh/n/+Rb3kcMG5xQESt6ouQo/zMoII=

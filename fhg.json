@@ -1,0 +1,263 @@
+﻿[
+  {
+    "Entity": "Beneficiaries of SR"
+  },
+  {
+    "Entity": "Andhra Pradesh",
+    "Deviation (Rs)* Addtional": -1056211328,
+    "Deviation (Rs)* Addtional for Sign Change": -511945588,
+    "Deviation (Rs)* Postfacto": 883782702,
+    "Deviation (Rs)* Normal": -1314781082,
+    "Deviation (Rs) Final": "49,24,37,95,552",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "Karnataka",
+    "Deviation (Rs)* Addtional": -1002524831,
+    "Deviation (Rs)* Addtional for Sign Change": -500443219,
+    "Deviation (Rs)* Postfacto": 264709567,
+    "Deviation (Rs)* Normal": 976343493,
+    "Deviation (Rs) Final": "1,54,88,07,37,646",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "Kerala",
+    "Deviation (Rs)* Addtional": -108606988,
+    "Deviation (Rs)* Addtional for Sign Change": -569345608,
+    "Deviation (Rs)* Postfacto": -151248013,
+    "Deviation (Rs)* Normal": -2126254445,
+    "Deviation (Rs) Final": "97,44,47,35,566",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "Tamil Nadu",
+    "Deviation (Rs)* Addtional": -1267111213,
+    "Deviation (Rs)* Addtional for Sign Change": -707087056,
+    "Deviation (Rs)* Postfacto": 250645121,
+    "Deviation (Rs)* Normal": 1171774861,
+    "Deviation (Rs) Final": "2,28,18,50,44,975",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "Telangana",
+    "Deviation (Rs)* Addtional": -780164176,
+    "Deviation (Rs)* Addtional for Sign Change": -418084020,
+    "Deviation (Rs)* Postfacto": -1842005109,
+    "Deviation (Rs)* Normal": -139644564,
+    "Deviation (Rs) Final": "20,35,97,67,053",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "Puducherry",
+    "Deviation (Rs)* Addtional": -47860371,
+    "Deviation (Rs)* Addtional for Sign Change": -56598993,
+    "Deviation (Rs)* Postfacto": -1132315198,
+    "Deviation (Rs)* Normal": 328647419,
+    "Deviation (Rs) Final": "22,38,29,63,623",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "PGCIL(SR)",
+    "Deviation (Rs)* Addtional": -7672953,
+    "Deviation (Rs)* Addtional for Sign Change": -14870400,
+    "Deviation (Rs)* Postfacto": 0,
+    "Deviation (Rs)* Normal": 288864013,
+    "Deviation (Rs) Final": "26,63,20,660",
+    "Payable To Pool/ Receviable From Pool": "Receivable"
+  },
+  {
+    "Entity": "Goa(SR)",
+    "Deviation (Rs)* Addtional": -24617948,
+    "Deviation (Rs)* Addtional for Sign Change": -65855865,
+    "Deviation (Rs)* Postfacto": -213230893,
+    "Deviation (Rs)* Normal": 160241300,
+    "Deviation (Rs) Final": "14,34,63,406",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "CGS/ISGS Under APM"
+  },
+  {
+    "Entity": "NTPC,RSTPS",
+    "Deviation (Rs)* Addtional": -35814542,
+    "Deviation (Rs)* Addtional for Sign Change": -16284440,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -192517890,
+    "Deviation (Rs) Final": "24,46,16,872",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "NTPC,RSTPS-III",
+    "Deviation (Rs)* Addtional": -11616154,
+    "Deviation (Rs)* Addtional for Sign Change": -1871864,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -84188795,
+    "Deviation (Rs) Final": "9,76,76,813",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "NTPC,Talcher-II",
+    "Deviation (Rs)* Addtional": -31959244,
+    "Deviation (Rs)* Addtional for Sign Change": -4758875,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": 648536964,
+    "Deviation (Rs) Final": "61,18,18,845",
+    "Payable To Pool/ Receviable From Pool": "Receivable"
+  },
+  {
+    "Entity": "NTPC,Sim'dri-II",
+    "Deviation (Rs)* Addtional": -27149131,
+    "Deviation (Rs)* Addtional for Sign Change": -21650966,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -572734728,
+    "Deviation (Rs) Final": "62,15,34,825",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "NTPC,Sim'dri-I",
+    "Deviation (Rs)* Addtional": -191721243,
+    "Deviation (Rs)* Addtional for Sign Change": -13751244,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -563679613,
+    "Deviation (Rs) Final": "76,91,52,100",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "NTECL",
+    "Deviation (Rs)* Addtional": -66971791,
+    "Deviation (Rs)* Addtional for Sign Change": -10635957,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -1166109293,
+    "Deviation (Rs) Final": "1,24,37,17,041",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "NLC, II Stage I",
+    "Deviation (Rs)* Addtional": -32950951,
+    "Deviation (Rs)* Addtional for Sign Change": -33517037,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": 806697038,
+    "Deviation (Rs) Final": "74,02,29,050",
+    "Payable To Pool/ Receviable From Pool": "Receivable"
+  },
+  {
+    "Entity": "NLC, II Stage II",
+    "Deviation (Rs)* Addtional": -46428000,
+    "Deviation (Rs)* Addtional for Sign Change": -65780665,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": 921650352,
+    "Deviation (Rs) Final": "80,94,41,687",
+    "Payable To Pool/ Receviable From Pool": "Receivable"
+  },
+  {
+    "Entity": "NLC, I Expn",
+    "Deviation (Rs)* Addtional": -20954125,
+    "Deviation (Rs)* Addtional for Sign Change": -25608145,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": 863898819,
+    "Deviation (Rs) Final": "81,73,36,549",
+    "Payable To Pool/ Receviable From Pool": "Receivable"
+  },
+  {
+    "Entity": "NLC, II Expn",
+    "Deviation (Rs)* Addtional": -41387119,
+    "Deviation (Rs)* Addtional for Sign Change": -12731522,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -337259302,
+    "Deviation (Rs) Final": "39,13,77,943",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "NTPL",
+    "Deviation (Rs)* Addtional": -81768614,
+    "Deviation (Rs)* Addtional for Sign Change": -13521664,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -605100139,
+    "Deviation (Rs) Final": "70,03,90,417",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "NTPC,Kudgi-Unit I",
+    "Deviation (Rs)* Addtional": -49179382,
+    "Deviation (Rs)* Addtional for Sign Change": -5387755,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -624960260,
+    "Deviation (Rs) Final": "67,95,27,397",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "Sellers"
+  },
+  {
+    "Entity": "SEIL/ TPCIL",
+    "Deviation (Rs)* Addtional": -240774150,
+    "Deviation (Rs)* Addtional for Sign Change": -5832426,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -331686556,
+    "Deviation (Rs) Final": "57,82,93,132",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "MEPL",
+    "Deviation (Rs)* Addtional": -19223910,
+    "Deviation (Rs)* Addtional for Sign Change": 0,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -119036924,
+    "Deviation (Rs) Final": "13,82,60,834",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "SEL",
+    "Deviation (Rs)* Addtional": -28608527,
+    "Deviation (Rs)* Addtional for Sign Change": 0,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -46718927,
+    "Deviation (Rs) Final": "7,53,27,454",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "LKPPL",
+    "Deviation (Rs)* Addtional": -79022223,
+    "Deviation (Rs)* Addtional for Sign Change": 0,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -216580620,
+    "Deviation (Rs) Final": "29,56,02,843",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "LKPPL III",
+    "Deviation (Rs)* Addtional": -73309718,
+    "Deviation (Rs)* Addtional for Sign Change": 0,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -202537305,
+    "Deviation (Rs) Final": "27,58,47,023",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "Coastal(CE)",
+    "Deviation (Rs)* Addtional": -259910788,
+    "Deviation (Rs)* Addtional for Sign Change": -75155450,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -421366320,
+    "Deviation (Rs) Final": "75,64,32,558",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "IL&FS",
+    "Deviation (Rs)* Addtional": -29793000,
+    "Deviation (Rs)* Addtional for Sign Change": -4958047,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -377425592,
+    "Deviation (Rs) Final": "41,21,76,639",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  },
+  {
+    "Entity": "NCC (SGPL Unit-1 and Unit-2)",
+    "Deviation (Rs)* Addtional": -66699144,
+    "Deviation (Rs)* Addtional for Sign Change": -28686392,
+    "Deviation (Rs)* Postfacto": "--",
+    "Deviation (Rs)* Normal": -410733278,
+    "Deviation (Rs) Final": "50,61,18,814",
+    "Payable To Pool/ Receviable From Pool": "Payable"
+  }
+]
