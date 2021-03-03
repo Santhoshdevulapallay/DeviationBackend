@@ -179,23 +179,55 @@ def SRPCPdfFile(request):
             
             
             srpc=request.FILES['file'].read().decode("utf-8")
-            # import re
-            # clean = re.compile('<.*?>')
-            # text=re.sub(clean, '', srpc)
+            
+            states1={'Entity':"",
+            'DeviationAddtional':"",'DeviationAddtionalChange':"",'DeviationPostfacto':"",'DeviationNormal':"",'DeviationFinal':"",'PayableReceviable':""}
 
             from bs4 import BeautifulSoup
             soup = BeautifulSoup(srpc, 'html.parser')
-
-            for x in soup.find_all('td'):
-                print(x.string)
+            all_tables=[]
             
-            df=pd.read_excel(srpc)
+            table = soup.find_all('table')
+            popupdata=[]
+            
+            for tr in table[0].find_all('tr'):
+                row_wise=[]
+                row_wise=list(tr.find_all('td'))
+                if len(row_wise)<2:
+                    continue
+                else:
+                    states1['Entity']=row_wise[0].text
+                    states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
+                    states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
+                    states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
+                    states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
+                    states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
+                    states1['PayableReceviable']=row_wise[6].text.replace('--','0')
+                    popupdata.append(states1.copy())
 
-            # states={'StateName':"",
-            # 'DeviationFinal':"",'Payable To Pool/ Receviable From Pool':""}
+            for tr in table[1].find_all('tr'):
+                row_wise=[]
+                row_wise=list(tr.find_all('td'))
+                print(row_wise)
+                # if len(row_wise)<2:
+                #     continue
+                # else:
+                #     states1['Entity']=row_wise[0].text
+                #     states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
+                #     states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
+                #     states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
+                #     states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
+                #     states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
+                #     states1['PayableReceviable']=row_wise[6].text.replace('--','0')
+                #     popupdata.append(states1.copy())
+                
+            pdb.set_trace()
+                
+            
+            # df=pd.read_excel(srpc)
 
-            states1={'Entity':"",
-            'DeviationAddtional':"",'DeviationAddtionalChange':"",'DeviationPostfacto':"",'DeviationNormal':"",'DeviationFinal':"",'PayableReceviable':""}
+
+            
             
             # popupdata=[]
             # # popupdata1=[]
