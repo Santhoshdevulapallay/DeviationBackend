@@ -45,60 +45,8 @@ class FormData(models.Model):
     regAddress=models.CharField(max_length=255,default="Null")
     region=models.CharField(max_length=255,default="Null")
     userCategory=models.CharField(max_length=255,default="Null")
-    contactName=models.CharField(max_length=255,default="Null")
-    designation=models.CharField(max_length=255,default="Null")
-    telephone=models.BigIntegerField(default=None)
-    contactName2=models.CharField(max_length=255,default="Null")
-    designation2=models.CharField(max_length=255,default="Null")
-    telephone2=models.BigIntegerField(default=None)
-    contactName3=models.CharField(max_length=255,null=True,blank=True,default="Null")
-    designation3=models.CharField(max_length=255,null=True,blank=True,default="Null")
-    telephone3=models.BigIntegerField(null=True,blank=True,default="Null")
-    #DSM Account Details
-    accountName=models.CharField(max_length=255,default="Null")
-    accountNumber=models.BigIntegerField(blank=True,default=None)
-    bankName=models.CharField(max_length=255,default="Null")
-    branchName=models.CharField(max_length=255,default="Null")
-    ifscCode=models.CharField(max_length=100,default="Null")
-     # REACTIVE Account Details
-    accountName2=models.CharField(max_length=255,default="Null")
-    accountNumber2=models.BigIntegerField(blank=True,null=True,default="Null")
-    bankName2=models.CharField(max_length=255,default="Null")
-    branchName2=models.CharField(max_length=255,default="Null")
-    ifscCode2=models.CharField(max_length=100,default="Null")
-    # CONGESTION account Details
-    accountName3=models.CharField(max_length=255,default="Null")
-    accountNumber3=models.BigIntegerField(blank=True,null=True,default="Null")
-    bankName3=models.CharField(max_length=255,default="Null")
-    branchName3=models.CharField(max_length=255,default="Null")
-    ifscCode3=models.CharField(max_length=100,default="Null")
-
-    # RRAS account Details
-    accountName4=models.CharField(max_length=255,default="Null")
-    accountNumber4=models.BigIntegerField(blank=True,null=True,default="Null")
-    bankName4=models.CharField(max_length=255,default="Null")
-    branchName4=models.CharField(max_length=255,default="Null")
-    ifscCode4=models.CharField(max_length=100,default="Null")
-
-    # AGC account Details
-    accountName5=models.CharField(max_length=255,default="Null")
-    accountNumber5=models.BigIntegerField(blank=True,null=True,default="Null")
-    bankName5=models.CharField(max_length=255,default="Null")
-    branchName5=models.CharField(max_length=255,default="Null")
-    ifscCode5=models.CharField(max_length=100,default="Null")
-
-    # SCED account Details
-    accountName6=models.CharField(max_length=255,default="Null")
-    accountNumber6=models.BigIntegerField(blank=True,null=True,default="Null")
-    bankName6=models.CharField(max_length=255,default="Null")
-    branchName6=models.CharField(max_length=255,default="Null")
-    ifscCode6=models.CharField(max_length=100,default="Null")
-
-    #TAX Details
-    pannumber=models.CharField(max_length=15,default="Null")
-    tannumber=models.CharField(max_length=20,default="Null")
-    gstinnumber=models.CharField(max_length=30,default="Null")
-
+   
+    Status=models.CharField(max_length=255,default="Created")
     remarks=models.CharField(max_length=255,default="Check all details")
     isFinanceVerified=models.BooleanField(default=False)
     isFinanceApproved=models.BooleanField(default=False)
@@ -107,6 +55,66 @@ class FormData(models.Model):
 
     def __str__(self):
         return self.entityName
+
+class ContactDetails(models.Model):
+    contactName=models.CharField(max_length=255,default=None)
+    designation=models.CharField(max_length=255,default=None)
+    telephone=models.BigIntegerField(blank=True,default=None)
+    contactName2=models.CharField(max_length=255,default=None)
+    designation2=models.CharField(max_length=255,default=None)
+    telephone2=models.BigIntegerField(blank=True,default=None)
+    contactName3=models.CharField(max_length=255,default="NULL",null=True)
+    designation3=models.CharField(max_length=255,default="NULL",null=True)
+    telephone3=models.BigIntegerField(blank=True,default=0,null=True)
+    register_id=models.ForeignKey(FormData,on_delete=models.CASCADE)
+
+class BankPANDetails(models.Model):
+    #DSM Account Details
+    accountName=models.CharField(max_length=255,default="Null",null=True)
+    accountNumber=models.BigIntegerField(blank=True,default=0,null=True)
+    bankName=models.CharField(max_length=255,default="Null",null=True)
+    branchName=models.CharField(max_length=255,default="Null",null=True)
+    ifscCode=models.CharField(max_length=100,default="Null",null=True)
+     # REACTIVE Account Details
+    accountName2=models.CharField(max_length=255,default="Null",null=True)
+    accountNumber2=models.BigIntegerField(blank=True,default=0,null=True)
+    bankName2=models.CharField(max_length=255,default="Null",null=True)
+    branchName2=models.CharField(max_length=255,default="Null",null=True)
+    ifscCode2=models.CharField(max_length=100,default="Null",null=True)
+    # CONGESTION account Details
+    accountName3=models.CharField(max_length=255,default="Null",null=True)
+    accountNumber3=models.BigIntegerField(blank=True,default=0,null=True)
+    bankName3=models.CharField(max_length=255,default="Null",null=True)
+    branchName3=models.CharField(max_length=255,default="Null",null=True)
+    ifscCode3=models.CharField(max_length=100,default="Null",null=True)
+
+    # RRAS account Details
+    accountName4=models.CharField(max_length=255,default="Null",null=True)
+    accountNumber4=models.BigIntegerField(blank=True,default=0,null=True)
+    bankName4=models.CharField(max_length=255,default="Null",null=True)
+    branchName4=models.CharField(max_length=255,default="Null",null=True)
+    ifscCode4=models.CharField(max_length=100,default="Null",null=True)
+
+    # AGC account Details
+    accountName5=models.CharField(max_length=255,default="Null",null=True)
+    accountNumber5=models.BigIntegerField(blank=True,default=0,null=True)
+    bankName5=models.CharField(max_length=255,default="Null",null=True)
+    branchName5=models.CharField(max_length=255,default="Null",null=True)
+    ifscCode5=models.CharField(max_length=100,default="Null",null=True)
+
+    # SCED account Details
+    accountName6=models.CharField(max_length=255,default="Null",null=True)
+    accountNumber6=models.BigIntegerField(blank=True,default=0,null=True)
+    bankName6=models.CharField(max_length=255,default="Null",null=True)
+    branchName6=models.CharField(max_length=255,default="Null",null=True)
+    ifscCode6=models.CharField(max_length=100,default="Null",null=True)
+
+    #TAX Details
+    pannumber=models.CharField(max_length=15,default="Null",null=True)
+    tannumber=models.CharField(max_length=20,default="Null",null=True)
+    gstinnumber=models.CharField(max_length=30,default="Null",null=True)
+
+    bpregister_id=models.ForeignKey(FormData,on_delete=models.CASCADE)
 
 class Approved(models.Model):
     entityName=models.CharField(max_length=255)
@@ -336,8 +344,6 @@ class OldBankDetails(models.Model):
         return self.accountName
 
 class ApplicantImages(models.Model):
-#    name = models.CharField(max_length = 50)
-#    picture = models.ImageField(upload_to = 'pictures')
     entityName=models.CharField(max_length=100,default="null")
     # username=models.ForeignKey(User,on_delete=models.CASCADE,max_length=100,default="santhosh")
     image_url=models.URLField(max_length=200,default="null")

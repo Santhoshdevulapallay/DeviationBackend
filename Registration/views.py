@@ -9,7 +9,7 @@ from django.http import JsonResponse,HttpResponse
 from .models import *
 from django.db.models import Q
 import secrets ,requests,datetime,pandas as pd
-import string,pdb
+import string,pdb,os
 from django_http_exceptions import HTTPExceptions
 from django.core import serializers
 from django.db import connection
@@ -309,6 +309,7 @@ def Registration(request,*args):
                
         except ValueError:
             val = None
+
         if val is not None or val:
             val=int(request_data['postData']['telephone3'])
 
@@ -341,64 +342,76 @@ def Registration(request,*args):
                
         
         
-        R=FormData(
+        Base=FormData(
                     entityName=request_data['postData']['entityName'],
                     regAddress=request_data['postData']['regAddress'],
                     region=request_data['postData']['region'],
                     userCategory=request_data['postData']['userCategory'],
-                    contactName=request_data['postData']['contactName'],
-                    designation=request_data['postData']['designation'],
-                    telephone=int(request_data['postData']['telephone']),
-                    contactName2=request_data['postData']['contactName2'],
-                    designation2=request_data['postData']['designation2'],
-                    telephone2=int(request_data['postData']['telephone2']),
-                    contactName3=request_data['postData']['contactName3'],
-                    designation3=request_data['postData']['designation3'],
-                    telephone3=val,
-                    accountName=request_data['postData']['accountName'],
-                    accountNumber=int(request_data['postData']['accountNumber']),
-                    bankName=request_data['postData']['bankName'],
-                    branchName=request_data['postData']['branchName'],
-                    ifscCode=request_data['postData']['ifscCode'],
-
-                    accountName2=request_data['postData']['accountName2'],
-                    accountNumber2=accountNumber2,
-                    bankName2=request_data['postData']['bankName2'],
-                    branchName2=request_data['postData']['branchName2'],
-                    ifscCode2=request_data['postData']['ifscCode2'],
-
-                    accountName3=request_data['postData']['accountName3'],
-                    accountNumber3=accountNumber3,
-                    bankName3=request_data['postData']['bankName3'],
-                    branchName3=request_data['postData']['branchName3'],
-                    ifscCode3=request_data['postData']['ifscCode3'],
-
-                    accountName4=request_data['postData']['accountName4'],
-                    accountNumber4=accountNumber4,
-                    bankName4=request_data['postData']['bankName4'],
-                    branchName4=request_data['postData']['branchName4'],
-                    ifscCode4=request_data['postData']['ifscCode4'],
-
-                    accountName5=request_data['postData']['accountName5'],
-                    accountNumber5=accountNumber5,
-                    bankName5=request_data['postData']['bankName5'],
-                    branchName5=request_data['postData']['branchName5'],
-                    ifscCode5=request_data['postData']['ifscCode5'],
-
-                    accountName6=request_data['postData']['accountName6'],
-                    accountNumber6=accountNumber6,
-                    bankName6=request_data['postData']['bankName6'],
-                    branchName6=request_data['postData']['branchName6'],
-                    ifscCode6=request_data['postData']['ifscCode6'],
-
-                    pannumber=request_data['postData']['pannumber'],
-                    tannumber=request_data['postData']['tannumber'],
-                    gstinnumber=request_data['postData']['gstinnumber'],
-
                     register_id=request_data['regid'],
                     id=str(request_data['random'])
         )
-        R.save()
+        Base.save()
+
+        reference_id=FormData.objects.get(id=Base.id)
+
+        con=ContactDetails(
+            contactName=request_data['postData']['contactName'],
+            designation=request_data['postData']['designation'],
+            telephone=request_data['postData']['telephone'],
+            contactName2=request_data['postData']['contactName2'],
+            designation2=request_data['postData']['designation2'],
+            telephone2=request_data['postData']['telephone2'],
+            contactName3=request_data['postData']['contactName3'],
+            designation3=request_data['postData']['designation3'],
+            telephone3=val
+            )
+        con.register_id=reference_id
+        con.save()
+
+        bp=BankPANDetails(
+            accountName=request_data['postData']['accountName'],
+            accountNumber=request_data['postData']['accountNumber'],
+            bankName=request_data['postData']['bankName'],
+            branchName=request_data['postData']['branchName'],
+            ifscCode=request_data['postData']['ifscCode'],
+
+            accountName2=request_data['postData']['accountName2'],
+            accountNumber2=accountNumber2,
+            bankName2=request_data['postData']['bankName2'],
+            branchName2=request_data['postData']['branchName2'],
+            ifscCode2=request_data['postData']['ifscCode2'],
+
+            accountName3=request_data['postData']['accountName3'],
+            accountNumber3=accountNumber3,
+            bankName3=request_data['postData']['bankName3'],
+            branchName3=request_data['postData']['branchName3'],
+            ifscCode3=request_data['postData']['ifscCode3'],
+
+            accountName4=request_data['postData']['accountName4'],
+            accountNumber4=accountNumber4,
+            bankName4=request_data['postData']['bankName4'],
+            branchName4=request_data['postData']['branchName4'],
+            ifscCode4=request_data['postData']['ifscCode4'],
+
+            accountName5=request_data['postData']['accountName5'],
+            accountNumber5=accountNumber5,
+            bankName5=request_data['postData']['bankName5'],
+            branchName5=request_data['postData']['branchName5'],
+            ifscCode5=request_data['postData']['ifscCode5'],
+
+            accountName6=request_data['postData']['accountName6'],
+            accountNumber6=accountNumber6,
+            bankName6=request_data['postData']['bankName6'],
+            branchName6=request_data['postData']['branchName6'],
+            ifscCode6=request_data['postData']['ifscCode6'],
+
+            pannumber=request_data['postData']['pannumber'],
+            tannumber=request_data['postData']['tannumber'],
+            gstinnumber=request_data['postData']['gstinnumber']
+        )
+
+        bp.register_id=reference_id
+        bp.save()
 
         response_data={
         "Success":[{ "status": "Succesfully Stored" }]
@@ -446,16 +459,22 @@ def GetAllFullNames(request):
         return HTTPExceptions(e)
 
 def FetchData(request):
-
-    # records=FormData.objects.all()
-    # records_json = serializers.serialize('json', records)
-    def raise_exception():
-        raise HTTPExcetions.FORBIDDEN
     try:
-        data = list(FormData.objects.values())
-        return JsonResponse(data, safe=False)
+        # data = list(FormData.objects.filter(Status='Created').values('register_id__contactName'))
+        query1=list(ContactDetails.objects.filter(register_id__Status='Created').values('register_id__register_id','register_id__entityName','register_id__regAddress','register_id__region','register_id__userCategory','register_id__remarks','register_id__id','contactName','designation','telephone','contactName2','designation2','telephone2','contactName3','designation3','telephone3'))
+
+        query2=list(BankPANDetails.objects.filter(bpregister_id__Status='Created').all().values())
+        total_data=[]
+        for i in query1:
+            for j in query2:
+                if i['register_id__id']==j['bpregister_id_id']:
+                    final={**i,**j}
+                    total_data.append(final)
+        
+        return JsonResponse(total_data, safe=False)
+    
     except:
-        return raise_exception()
+        return HttpResponse("unsuccessful")
 
     # return HttpResponse(records_json, content_type='application/json')
     # return JsonResponse(records_json,safe=False)
@@ -498,7 +517,7 @@ def handle_uploaded_file(request):
     filename=name.split("@")[0]
     typeofcheque=name.split("@")[1]  # whether DSM,REACTIVE or CONGESTION
     _dir = _dir+filename
-      
+    
     if not os.path.exists(_dir):
         os.makedirs(_dir)
 
@@ -525,6 +544,7 @@ def handle_uploaded_file(request):
         image_url=image_url).order_by('-id')[:1].all().values_list('image_url','id'))
     
     return JsonResponse(image_urls,safe=False)
+
 def handle_uploaded_file1(f):
     # with open('images/cheque.jpeg', 'wb+') as destination:  Images in Djangoback/Deviation/images previously
     _dir = "Registration/static/images/"  
@@ -596,8 +616,15 @@ def DeleteFile(request):
     try:
         row_id=json.loads(request.body)
         
-        image_url=list(ApplicantImages.objects.filter(id=row_id).delete())
+        image_url=list(ApplicantImages.objects.filter(id=row_id).values_list('image_url'))
+        if len(image_url)>0:
+            path='Registration/'+image_url[0][0]
+            os.remove(path)
+        else:
+            pass
         
+        image_del=list(ApplicantImages.objects.filter(id=row_id).delete())
+
         return JsonResponse("Successfully Deleted",safe=False)
     except Exception as e:
         return HttpResponse(e)
@@ -606,6 +633,7 @@ def ImageUrls(request):
     try:
         userid=str(request.body.decode("utf-8")).replace(" ","")
         get_username=User.objects.filter(registration_id=userid).values_list('username')
+        pdb.set_trace()
         if len(get_username)>0:
             imageurls=list(ApplicantImages.objects.filter(entityName__icontains=get_username[0][0]).order_by('-id')[:6].values_list('image_url'))
         else:
