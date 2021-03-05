@@ -46,10 +46,16 @@ class FormData(models.Model):
     region=models.CharField(max_length=255,default="Null")
     userCategory=models.CharField(max_length=255,default="Null")
    
-    Status=models.CharField(max_length=255,default="Created")
-    remarks=models.CharField(max_length=255,default="Check all details")
-    isFinanceVerified=models.BooleanField(default=False)
-    isFinanceApproved=models.BooleanField(default=False)
+    # created_by=models.CharField(max_length=100,default=None)
+    review_auth1=models.CharField(max_length=100,default=None)
+    review_auth2=models.CharField(max_length=100,default=None)
+    auth1_remarks=models.CharField(max_length=100,default="Null")
+    auth2_remarks=models.CharField(max_length=100,default="Null")
+
+    reject_remarks1=models.CharField(max_length=100,default="Null")
+    reject_remarks2=models.CharField(max_length=100,default="Null") 
+    status=models.IntegerField(default=None)
+
     id=models.CharField(primary_key=True,max_length=255)
     register_id=models.CharField(max_length=100,default="Null")
 
@@ -380,3 +386,14 @@ class EmployeeSigns(models.Model):
     # empno actually mapped to Employeeuser1 table acting as foreign key
     class Meta:
         db_table = "Employee_signs"
+
+# class RegApproveAuthority(models.Model):
+#     created_by=models.CharField(max_length=100,default=None)
+#     review_auth1=models.CharField(max_length=100,default=None)
+#     review_auth2=models.CharField(max_length=100,default=None)
+#     auth1_remarks=models.CharField(max_length=100,default="Null")
+#     auth2_remarks=models.CharField(max_length=100,default="Null")
+#     status=models.IntegerField(default=None)
+
+#     def __str__(self):
+#         return self.created_by

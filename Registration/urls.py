@@ -50,6 +50,10 @@ urlpatterns=[
     path('updatebankdetails',views.UpdateBankDetails),
     path('final-bank-approval',views.FinalBankApproval),
     path('final-bank-rejection',views.FinalBankRejection),
-    path('getBankImage',views.GetBankImages)
+    path('getBankImage',views.GetBankImages),
+    
+    path('forwardfin',views.ForwardFin)
+
+
     
 ]  
