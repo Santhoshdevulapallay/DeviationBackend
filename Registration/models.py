@@ -56,6 +56,8 @@ class FormData(models.Model):
     reject_remarks2=models.CharField(max_length=100,default="Null") 
     status=models.IntegerField(default=None)
 
+    latest_record=models.DateTimeField(default=format(datetime.datetime.now()),null=True)
+
     id=models.CharField(primary_key=True,max_length=255)
     register_id=models.CharField(max_length=100,default="Null")
 

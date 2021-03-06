@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json, reportlab
 from django.http import JsonResponse,HttpResponse
 from .models import *
-from django.db.models import Q
+from django.db.models import Q,F
 import secrets ,requests,datetime,pandas as pd
 import string,pdb,os
 from django_http_exceptions import HTTPExceptions
@@ -350,7 +350,8 @@ def Registration(request,*args):
                     id=str(request_data['random']),
                     review_auth1='SRADMIN',
                     review_auth2='SRFINANCE',
-                    status=1
+                    status=1,
+                    latest_record=datetime.datetime.now()
         )
         Base.save()
 
@@ -440,9 +441,19 @@ def GetMOUsers(request):
 def GetAllUsers(request):
     try:
         if request.method =='GET':
-            all_users=list(Approved.objects.all().values())
+            # all_users=list(Approved.objects.all().values())
+            all_users=[]
+            query1=list(ContactDetails.objects.filter(register_id__status=3).values('register_id__register_id','register_id__entityName','register_id__regAddress','register_id__region','register_id__userCategory','register_id__auth1_remarks','register_id__id','contactName','designation','telephone','contactName2','designation2','telephone2','contactName3','designation3','telephone3'))
+
+            query2=list(BankPANDetails.objects.filter(bpregister_id__status=3).all().values())
+        
+            for i in query1:
+                for j in query2:
+                    if i['register_id__id']==j['bpregister_id_id']:
+                        final={**i,**j}
+                        all_users.append(final)
             
-            return JsonResponse(all_users,safe=False)
+            return JsonResponse({'all_users':all_users},safe=False)
         
         else:
             return HttpResponse("Bad Request ",404)
@@ -841,11 +852,11 @@ def PendingList(request):
             
             if get_data=="SRADMIN" or get_data=="SRFINANCE":
 
-                rejected_list=list(FormData.objects.filter(status=0).values_list('entityName','reject_remarks1','reject_remarks2','id'))
+                rejected_list=list(FormData.objects.filter(status=0).order_by('-latest_record').values_list('entityName','reject_remarks1','reject_remarks2','id'))
 
-                mo_pending=list(FormData.objects.filter(status=1).values_list('entityName','id'))
-                fin_pending=list(FormData.objects.filter(status=2).values_list('entityName','id'))
-                approved=list(FormData.objects.filter(status=3).values_list('entityName','id'))
+                mo_pending=list(FormData.objects.filter(status=1).order_by('-latest_record').values_list('entityName','id'))
+                fin_pending=list(FormData.objects.filter(status=2).order_by('-latest_record').values_list('entityName','id'))
+                approved=list(FormData.objects.filter(status=3).order_by('-latest_record').values_list('entityName','id'))
                 
                 summary=[
                     {'rejected_list':rejected_list},
@@ -862,11 +873,11 @@ def PendingList(request):
             
             else:
                 
-                rejected_list=list(FormData.objects.filter(register_id=get_data,status=0).values_list('entityName','reject_remarks1','reject_remarks2','id'))
+                rejected_list=list(FormData.objects.filter(register_id=get_data,status=0).order_by('-latest_record').values_list('entityName','reject_remarks1','reject_remarks2','id'))
 
-                mo_pending=list(FormData.objects.filter(register_id=get_data,status=1).values_list('entityName','id'))
-                fin_pending=list(FormData.objects.filter(register_id=get_data,status=2).values_list('entityName','id'))
-                approved=list(FormData.objects.filter(register_id=get_data,status=3).values_list('entityName','id'))
+                mo_pending=list(FormData.objects.filter(register_id=get_data,status=1).order_by('-latest_record').values_list('entityName','id'))
+                fin_pending=list(FormData.objects.filter(register_id=get_data,status=2).order_by('-latest_record').values_list('entityName','id'))
+                approved=list(FormData.objects.filter(register_id=get_data,status=3).order_by('-latest_record').values_list('entityName','id'))
     
                 summary=[
                     {'rejected_list':rejected_list},
@@ -884,35 +895,56 @@ def PendingList(request):
 def RejectedDetails(request):
     try:
         user_id=request.body.decode("utf-8")
-        
-        if user_id =="SRADMIN":
-            user_totaldata=[]
-            readOnlyStatus=False
+        user_totaldata=[]
+        get_status=list(FormData.objects.filter(register_id=user_id).order_by('-latest_record')[:1].values_list('status'))
+        if len(get_status)>0:
+            status=get_status[0][0]
         else:
-            user_registered=FormData.objects.filter(register_id=user_id,status=0).count()
-            # user_approved=list(Approved.objects.filter(register_id=user_id).values('id'))
+            status=0
+
+        if user_id =="SRADMIN":
+            readOnlyStatus=False
+
+        else:
+            form_details=list(ContactDetails.objects.filter(register_id__register_id=user_id,register_id__status=status).order_by('-register_id__latest_record')[:1].values(**{'entityName':F('register_id__entityName'),'regAddress':F('register_id__regAddress'),'region':F('register_id__region'),'userCategory':F('register_id__userCategory'),'reg_id':F('register_id__id')}))
+
+            contact_details=list(ContactDetails.objects.filter(register_id__register_id=user_id,register_id__status=status).order_by('-register_id__latest_record')[:1].all().values())
             
-            if user_registered >0:
-                readOnlyStatus=True
+            bank_details=list(BankPANDetails.objects.filter(bpregister_id__register_id=user_id,bpregister_id__status=status).order_by('-bpregister_id__latest_record')[:1].all().values())
+            total_data=[]
+            
+            for i in form_details:
+                for j in contact_details:
+                    if i['reg_id']==j['register_id_id']:
+                        final={**i,**j}
+                        total_data.append(final)
+            
+            for k in total_data:
+                for p in bank_details:
+                    if k['reg_id']==p['bpregister_id_id']:
+                        all_sum={**k,**p}
+                        user_totaldata.append(all_sum)
+            
+            if status!=0:
+               readOnlyStatus=True
             else:
                 readOnlyStatus=False
             
             
-            user_formdata=list(FormData.objects.filter(register_id__icontains=user_id).all().values())
-            user_formdata1=list(Approved.objects.filter(register_id__icontains=user_id).all().values())
+            # user_formdata=list(FormData.objects.filter(register_id__icontains=user_id).all().values())
+            # user_formdata1=list(Approved.objects.filter(register_id__icontains=user_id).all().values())
+            # user_formdata2=list(Rejected.objects.filter(register_id__icontains=user_id).all().values())
+            # user_totaldata=user_formdata+user_formdata1+user_formdata2
             
-            user_formdata2=list(Rejected.objects.filter(register_id__icontains=user_id).all().values())
-
-            user_totaldata=user_formdata+user_formdata1+user_formdata2
-            
-            if len(user_totaldata)>0:
-                user_totaldata=user_totaldata[len(user_totaldata)-1]
-            else:
-                user_totaldata=[]
-            
-        return JsonResponse({"user_formdata":user_totaldata,"readonly":readOnlyStatus},safe=False)
+            # if len(user_totaldata)>0:
+            #     user_totaldata=user_totaldata[len(user_totaldata)-1]
+            # else:
+            #     user_totaldata=[]
+           
+        return JsonResponse({'user_totaldata':user_totaldata,'readOnly':readOnlyStatus},safe=False)
         
     except Exception as e:
+        print(e)
         return HttpResponse("Failed to fetch records")
       
 @csrf_exempt
@@ -1166,9 +1198,23 @@ def ForwardFin(request):
         
         elif data['status']==-1:
             FormData.objects.filter(id=data['id']).update(status=0,reject_remarks1=data['remarks'])
+            
+            imageurls=list(ApplicantImages.objects.filter(entityName__icontains=data['imageid'].replace(" ","")).values_list('image_url','id'))
+            
+            for i in imageurls:
+                path='Registration'+i[0]
+                os.remove(path)
+                ApplicantImages.objects.filter(id=i[1]).delete()
 
         elif data['status']==-2:
             FormData.objects.filter(id=data['id']).update(status=0,reject_remarks2=data['remarks'])
+
+            imageurls=list(ApplicantImages.objects.filter(entityName__icontains=data['imageid'].replace(" ","")).values_list('image_url','id'))
+            
+            for i in imageurls:
+                path='Registration'+i[0]
+                os.remove(path)
+                ApplicantImages.objects.filter(id=i[1]).delete()
         else:
             pass
 
