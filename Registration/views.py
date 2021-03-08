@@ -339,14 +339,23 @@ def Registration(request,*args):
                 accountNumber6=None
         else:
             accountNumber6=int(request_data['postData']['accountNumber6'])
-               
+            
+        if request_data['regid']=='SRADMIN':
+            reg_id=list(FormData.objects.filter(entityName__icontains=request_data['postData']['entityName']).values_list('register_id'))
+
+            if len(reg_id)>0:
+                reg_id=reg_id[0][0]
+            else:
+                return JsonResponse({'success':False},safe=False)
+        else:
+            reg_id=request_data['regid']
         
         Base=FormData(
                     entityName=request_data['postData']['entityName'],
                     regAddress=request_data['postData']['regAddress'],
                     region=request_data['postData']['region'],
                     userCategory=request_data['postData']['userCategory'],
-                    register_id=request_data['regid'],
+                    register_id=reg_id,
                     id=str(request_data['random']),
                     review_auth1='SRADMIN',
                     review_auth2='SRFINANCE',
@@ -416,12 +425,8 @@ def Registration(request,*args):
         bp.bpregister_id=reference_id
         bp.save()
 
-      
-
-        response_data={
-        "Success":[{ "status": "Succesfully Stored" }]
-            }
-        return JsonResponse(response_data)
+    
+        return JsonResponse({'success':True},safe=False)
     else:
         return HttpResponse(status=403)
     
@@ -947,25 +952,24 @@ def RejectedDetails(request):
         print(e)
         return HttpResponse("Failed to fetch records")
       
-@csrf_exempt
+
 def FetchEditDetails(request):
     try:
-        user_id=request.body.decode("utf-8")
-
+        user_id=request.body.decode("utf-8").replace(" ","")
         
-        user_details=list(Approved.objects.filter(register_id__icontains=user_id).values('contactName','designation','telephone','contactName2','designation2','telephone2','contactName3','designation3','telephone3'))
+        user_details=list(ContactDetails.objects.filter(register_id__register_id=user_id,register_id__status=3).all().values())
 
-        
-        return JsonResponse(user_details[len(user_details)-1],safe=False)
+        return JsonResponse({'user_details':user_details},safe=False)
 
     except Exception as e:
         return HttpResponse("unsuccessful")
 
-@csrf_exempt
+
 def EditDetails(request):
     try:
         edited_data=json.loads(request.body)
         formdata=edited_data['formcontent']
+        
         try:
             val = formdata['telephone3']
             if not val:
@@ -977,7 +981,7 @@ def EditDetails(request):
         if val is not None or val:
             val=int(formdata['telephone3'])
 
-        clone_data=OldDetails(
+        clone_data=ContactDetails(
             contactName=formdata['contactName'],
             designation=formdata['designation'],
             telephone=formdata['telephone'],
@@ -987,52 +991,37 @@ def EditDetails(request):
             contactName3=formdata['contactName3'],
             designation3=formdata['designation3'],
             telephone3=val,
-            fullname=edited_data['fullname'],
-            isadminverified=False
+            modified_status=1
         )
         
-        c=Approved.objects.get(register_id__icontains=edited_data['register_id'])
-        clone_data.register_id=c
+        reg=FormData.objects.order_by('-latest_record').get(register_id=edited_data['register_id'],status=3)
+        clone_data.register_id=reg
         clone_data.save()
-        return JsonResponse("success",safe=False)
+        
+        return JsonResponse({"success":True},safe=False)
     except Exception as e:
-        return HttpResponse("unsuccessful")
+        print(e)
+        return JsonResponse({"success":False},safe=False)
 
-@csrf_exempt
+
 def FetchAdminContacts(request):
     try:
-        fetchforadmin=list(OldDetails.objects.filter(isadminverified=False).all().values())
-
-        return JsonResponse(fetchforadmin,safe=False)
+        fetch_contact=list(ContactDetails.objects.filter(modified_status=1).values('register_id__entityName','id','register_id__register_id','contactName','designation','telephone','contactName2','designation2','telephone2','contactName3','designation3','telephone3'))
+        pending_contacts=[
+            {'fetch_contact':fetch_contact}
+        ]
+        return JsonResponse(pending_contacts,safe=False)
 
     except Exception as e:
         return HttpResponse("unsuccessful")
-@csrf_exempt
+
 def FinalEditApproval(request):
     try:
         final_data=json.loads(request.body)
-        OldDetails.objects.filter(id=final_data['id']).update(isadminverified=True)
         
-        new_details=list(OldDetails.objects.filter(id=final_data['id']).values_list('contactName','designation','telephone','contactName2','designation2','telephone2','contactName3','designation3','telephone3'))
+        ContactDetails.objects.filter(id=final_data).update(modified_status=2)
 
-        old_details=list(Approved.objects.filter(id=final_data['register_id']).values_list('contactName','designation','telephone','contactName2','designation2','telephone2','contactName3','designation3','telephone3'))
-
-        
-        OldDetails.objects.filter(id=final_data['id']).update(contactName=old_details[0][0],designation=old_details[0][1],telephone=old_details[0][2],
-        contactName2=old_details[0][3],designation2=old_details[0][4],
-        telephone2=old_details[0][5],
-        contactName3=old_details[0][6],designation3=old_details[0][7],
-        telephone3=old_details[0][8],approvedDate=datetime.date.today())
-        
-        Approved.objects.filter(id=final_data['register_id']).update(contactName=new_details[0][0],designation=new_details[0][1],telephone=new_details[0][2],
-        contactName2=new_details[0][3],designation2=new_details[0][4],
-        telephone2=new_details[0][5],
-        contactName3=new_details[0][6],designation3=new_details[0][7],
-        telephone3=new_details[0][8])
-        
         return JsonResponse("Successfull",safe=False)
-       
-    
     except Exception as e:
         return HttpResponse(e,status=204)
 

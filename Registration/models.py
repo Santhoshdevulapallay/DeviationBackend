@@ -75,6 +75,7 @@ class ContactDetails(models.Model):
     designation3=models.CharField(max_length=255,default="NULL",null=True)
     telephone3=models.BigIntegerField(blank=True,default=0,null=True)
     register_id=models.ForeignKey(FormData,on_delete=models.CASCADE)
+    modified_status=models.IntegerField(default=0)
 
 class BankPANDetails(models.Model):
     #DSM Account Details
