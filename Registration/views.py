@@ -223,18 +223,19 @@ class LoginAPI(APIView):
             calendar=list(YearCalendar.objects.filter(year=fullyear).all().values())
             
             if user.is_superuser:
-                return Response({
+                return JsonResponse({
                     'token': token.key,
                     'user_id': user.pk,
                     'isSuperUser':user.is_superuser,
                     'userName':user.username,
                     'registration_id':user.registration_id,
-                    'calendar':calendar
+                    'calendar':calendar,
+                    'success':True
                     })
 
             elif len(mo_employee)>0:
             
-                return Response({
+                return JsonResponse({
                     'token': token.key,
                     'emp_no': mo_employee[0]['empno'],
                     # 'emp_name': mo_employee[0]['name'],
@@ -244,13 +245,14 @@ class LoginAPI(APIView):
                     'userName':mo_employee[0]['name'],
                     'usertype':'MO',
                     'registration_id':user.registration_id,
-                    'calendar':calendar
+                    'calendar':calendar,
+                    'success':True
                     })
             else:
                 ge=list(GeneralEntities1.objects.filter(registration_id_id=user.pk).values().all())
                 
                 if len(ge)>0:
-                    return Response({
+                    return JsonResponse({
                         'token': token.key,
                         'user_id': user.pk,
                         'email': ge[0]['email'],
@@ -261,13 +263,14 @@ class LoginAPI(APIView):
                         'fullname':ge[0]['fullname'],
                         'usercategory':ge[0]['usercategory'],
                         'usertype':ge[0]['usertype'],
-                        'calendar':calendar
+                        'calendar':calendar,
+                        'success':True
                         })
                 else:
-                    return HttpResponse('notfound',status=404)
+                    return JsonResponse({'success':False},safe=False)
         except Exception as e:
             # logger.info('invalid login credentials'+e)
-            return JsonResponse('invalid login credentials',status=404)
+            return JsonResponse({'success':False},safe=False)
 
 class LogoutAPI(APIView):
     authentication_classes=(TokenAuthentication,)
@@ -913,7 +916,7 @@ def RejectedDetails(request):
         else:
             form_details=list(ContactDetails.objects.filter(register_id__register_id=user_id,register_id__status=status).order_by('-register_id__latest_record')[:1].values(**{'entityName':F('register_id__entityName'),'regAddress':F('register_id__regAddress'),'region':F('register_id__region'),'userCategory':F('register_id__userCategory'),'reg_id':F('register_id__id')}))
 
-            contact_details=list(ContactDetails.objects.filter(register_id__register_id=user_id,register_id__status=status).order_by('-register_id__latest_record')[:1].all().values())
+            contact_details=list(ContactDetails.objects.filter(register_id__register_id=user_id,register_id__status=status,modified_status=0).order_by('-register_id__latest_record')[:1].all().values())
             
             bank_details=list(BankPANDetails.objects.filter(bpregister_id__register_id=user_id,bpregister_id__status=status).order_by('-bpregister_id__latest_record')[:1].all().values())
             total_data=[]
@@ -934,17 +937,6 @@ def RejectedDetails(request):
                readOnlyStatus=True
             else:
                 readOnlyStatus=False
-            
-            
-            # user_formdata=list(FormData.objects.filter(register_id__icontains=user_id).all().values())
-            # user_formdata1=list(Approved.objects.filter(register_id__icontains=user_id).all().values())
-            # user_formdata2=list(Rejected.objects.filter(register_id__icontains=user_id).all().values())
-            # user_totaldata=user_formdata+user_formdata1+user_formdata2
-            
-            # if len(user_totaldata)>0:
-            #     user_totaldata=user_totaldata[len(user_totaldata)-1]
-            # else:
-            #     user_totaldata=[]
            
         return JsonResponse({'user_totaldata':user_totaldata,'readOnly':readOnlyStatus},safe=False)
         
@@ -957,8 +949,8 @@ def FetchEditDetails(request):
     try:
         user_id=request.body.decode("utf-8").replace(" ","")
         
-        user_details=list(ContactDetails.objects.filter(register_id__register_id=user_id,register_id__status=3).all().values())
-
+        user_details=list(ContactDetails.objects.filter(register_id__register_id=user_id,register_id__status=3).order_by('-id')[:1].all().values())
+        
         return JsonResponse({'user_details':user_details},safe=False)
 
     except Exception as e:
@@ -1019,13 +1011,13 @@ def FinalEditApproval(request):
     try:
         final_data=json.loads(request.body)
         
-        ContactDetails.objects.filter(id=final_data).update(modified_status=2)
+        ContactDetails.objects.filter(id=final_data).update(modified_status=0)
 
         return JsonResponse("Successfull",safe=False)
     except Exception as e:
         return HttpResponse(e,status=204)
 
-@csrf_exempt
+
 def FinalEditRejection(request):
     try:
         final_data=json.loads(request.body)

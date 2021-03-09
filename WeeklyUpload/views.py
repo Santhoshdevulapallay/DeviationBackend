@@ -190,72 +190,68 @@ def SRPCPdfFile(request):
             table = soup.find_all('table')
             popupdata=[]
             
-            for tr in table[0].find_all('tr'):
-                row_wise=[]
-                row_wise=list(tr.find_all('td'))
-                if len(row_wise)<2:
-                    continue
-                else:
-                    states1['Entity']=row_wise[0].text
-                    states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
-                    states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
-                    states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
-                    states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
-                    states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
-                    states1['PayableReceviable']=row_wise[6].text.replace('--','0')
-                    popupdata.append(states1.copy())
-
+            start=0
             for tr in table[1].find_all('tr'):
-                row_wise=[]
-                row_wise=list(tr.find_all('td'))
-                print(row_wise)
-                # if len(row_wise)<2:
-                #     continue
-                # else:
-                #     states1['Entity']=row_wise[0].text
-                #     states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
-                #     states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
-                #     states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
-                #     states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
-                #     states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
-                #     states1['PayableReceviable']=row_wise[6].text.replace('--','0')
-                #     popupdata.append(states1.copy())
+                if start==0:
+                    start+=1
+                else:
+                    row_wise=[]
+                    row_wise=list(tr.find_all('td'))
+                    if len(row_wise)<2:
+                        continue
+                    else:
+                        states1['Entity']=row_wise[0].text
+                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
+                        states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
+                        states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
+                        states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
+                        states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
+                        states1['PayableReceviable']=row_wise[6].text.replace('--','0')
+                        popupdata.append(states1.copy())
                 
-            pdb.set_trace()
+            second_table=0
+            for tr in table[2].find_all('tr'):
+                if second_table==0:
+                    second_table+=1
+                else:
+                    row_wise=[]
+                    row_wise=list(tr.find_all('td'))
+                    if len(row_wise)<2:
+                        continue
+                    else:
+                        print(row_wise[0].text)
+                        states1['Entity']=row_wise[0].text
+                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
+                        states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
+                        states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
+                        states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
+                        states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
+                        states1['PayableReceviable']=row_wise[6].text.replace('--','0')
+                        popupdata.append(states1.copy())
                 
-            
-            # df=pd.read_excel(srpc)
-
-
-            
-            
-            # popupdata=[]
-            # # popupdata1=[]
-            
-            # for i in range(0,len(df)):
+           
+            third_table=0
+            for tr in table[3].find_all('tr'):
+                if third_table==0:
+                    third_table+=1
+                else:
+                    row_wise=[]
+                    row_wise=list(tr.find_all('td'))
+                    if len(row_wise)<2:
+                        continue
+                    else:
+                        print(row_wise[0].text)
+                        states1['Entity']=row_wise[0].text
+                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
+                        states1['DeviationAddtionalChange']=0
+                        states1['DeviationPostfacto']=0
+                        states1['DeviationNormal']=row_wise[2].text.replace(',','').replace('--','0')
+                        states1['DeviationFinal']=row_wise[3].text.replace(',','').replace('--','0')
+                        states1['PayableReceviable']=row_wise[4].text.replace('--','0')
+                        popupdata.append(states1.copy())
                 
-            #     states['StateName']=df['Entity'][i]
-                
-            #     states['DeviationFinal']=str(df['Deviation (Rs)\nFinal'][i]).replace(',','')
-            #     states['Payable To Pool/ Receviable From Pool']=df['Payable To Pool/ Receviable From Pool'][i]
-            #     popupdata.append(states.copy())
-            
-            popupdata1=[]
-            for i in range(0,len(df)):
-                states1['Entity']=df['A'][i]
-                
-                states1['DeviationAddtional']=str(df['B'][i]).replace(',','')
-                states1['DeviationAddtionalChange']=str(df['C'][i]).replace(',','')
-                states1['DeviationPostfacto']=str(df['D'][i]).replace(',','')
-                states1['DeviationNormal']=str(df['E'][i]).replace(',','')
-                states1['DeviationFinal']=str(df['F'][i]).replace(',','')
-                states1['PayableReceviable']=df['G'][i]
-
-                popupdata1.append(states1.copy())
-            
             context=[
-                # {'popup':popupdata},
-                {'full':popupdata1}
+                {'popup':popupdata}
             ]
             
             return JsonResponse(context,safe=False)
