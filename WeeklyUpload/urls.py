@@ -52,7 +52,7 @@ urlpatterns=[
     path('RevertAuthPreviousWeeks',views.RevertAuthPreviousWeeks),
 
     path('showFile',views.ShowFile),
-    path('validateJson',views.ValidateJson),
+    path('validateHtml',views.validateHtml),
     path('chatMessages',views.ChatMessages),
     path('getMessages',views.GetMessages),
     path('chatUsers',views.ChatUserList),

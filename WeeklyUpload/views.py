@@ -53,7 +53,7 @@ def ShowFile(request):
     return JsonResponse(popupdata,safe=False)
 
 
-def ValidateJson(request):
+def validateHtml(request):
     try:
 
         request_fileData=json.loads(request.body)
@@ -69,7 +69,6 @@ def ValidateJson(request):
             else:
                 continue
         
-        # if  non_users:
         return JsonResponse({"non_users":non_users},safe=False)
         
     except Exception as e:
@@ -197,7 +196,7 @@ def SRPCPdfFile(request):
                 else:
                     row_wise=[]
                     row_wise=list(tr.find_all('td'))
-                    if len(row_wise)<2:
+                    if len(row_wise)<2 or row_wise[0].text=='Entity':
                         continue
                     else:
                         states1['Entity']=row_wise[0].text
@@ -216,20 +215,20 @@ def SRPCPdfFile(request):
                 else:
                     row_wise=[]
                     row_wise=list(tr.find_all('td'))
-                    if len(row_wise)<2:
+                    if len(row_wise)<2 or row_wise[0].text=='0':
                         continue
                     else:
                         print(row_wise[0].text)
                         states1['Entity']=row_wise[0].text
-                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
-                        states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
-                        states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
-                        states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
-                        states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
+                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0').replace('-','0')
+                        states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0').replace('-','0')
+                        states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0').replace('-','0')
+                        states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0').replace('-','0')
+                        states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0').replace('-','0')
                         states1['PayableReceviable']=row_wise[6].text.replace('--','0')
                         popupdata.append(states1.copy())
                 
-           
+            
             third_table=0
             for tr in table[3].find_all('tr'):
                 if third_table==0:
@@ -237,7 +236,7 @@ def SRPCPdfFile(request):
                 else:
                     row_wise=[]
                     row_wise=list(tr.find_all('td'))
-                    if len(row_wise)<2:
+                    if len(row_wise)<2 or row_wise[0].text=='Entity':
                         continue
                     else:
                         print(row_wise[0].text)
@@ -249,7 +248,29 @@ def SRPCPdfFile(request):
                         states1['DeviationFinal']=row_wise[3].text.replace(',','').replace('--','0')
                         states1['PayableReceviable']=row_wise[4].text.replace('--','0')
                         popupdata.append(states1.copy())
-                
+            
+            
+            fourth_table=0
+            for tr in table[4].find_all('tr'):
+                if fourth_table==0:
+                    fourth_table+=1
+                else:
+                    row_wise=[]
+                    row_wise=list(tr.find_all('td'))
+                    
+                    if len(row_wise)<4 or row_wise[0].text=='':
+                        continue
+                    else:
+                        print(row_wise[0].text)
+                        states1['Entity']=row_wise[0].text
+                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
+                        states1['DeviationAddtionalChange']=0
+                        states1['DeviationPostfacto']=0
+                        states1['DeviationNormal']=row_wise[2].text.replace(',','').replace('--','0')
+                        states1['DeviationFinal']=row_wise[3].text.replace(',','').replace('--','0')
+                        states1['PayableReceviable']=row_wise[4].text.replace('--','0')
+                        popupdata.append(states1.copy())
+             
             context=[
                 {'popup':popupdata}
             ]
@@ -314,8 +335,7 @@ def WRPCERPC(request):
         data=json.loads(request.body)
         entities=['Western Region(*wrpc)','Eastern Region(*erpc)']
         regions=['wr','ER']
-
-        
+ 
         for region in regions:
             if len(ConfigureModel.objects.filter(Week_no=data['formdata']['weekNo'],registration_id=region)) >0:
                 ConfigureModel.objects.filter(Week_no=data['formdata']['weekNo'],registration_id=region).delete()
@@ -353,11 +373,11 @@ def WRPCERPC(request):
                     )
             Config.save()
         
-        return JsonResponse("success",safe=False)
+        return JsonResponse({'success':True},safe=False)
 
     except Exception as e:
         print(e)
-        return HTTPExceptions("error",status=404)   
+        return JsonResponse({'success':False},safe=False)   
 
 def StoreConfigured(request):
     if request.method=="POST":
@@ -365,7 +385,7 @@ def StoreConfigured(request):
             
             request_formData=(json.loads(request.body))['formData']
             request_fileData=(json.loads(request.body))['fileData']
-
+            
             for i in range(0,len(request_fileData)):
                 
                 reg_id=User.objects.filter(Q(generalentities1__alias1__iexact=request_fileData[i]['Entity'])|Q(generalentities1__alias2__iexact=request_fileData[i]['Entity'])|Q(generalentities1__alias3__iexact=request_fileData[i]['Entity'])|Q(generalentities1__alias4__iexact=request_fileData[i]['Entity'])).values('registration_id')
@@ -397,12 +417,12 @@ def StoreConfigured(request):
                     Lc_date=datetime.datetime.strptime(request_formData['lcDueDate'][:10], '%Y-%m-%d').date(),
                     Interest_levydate=datetime.datetime.strptime(request_formData['levyDueDate'][:10], '%Y-%m-%d').date(),
                     Entity=request_fileData[i]['Entity'],
-                    DevAdditional=int(float(request_fileData[i]['DeviationAddtional'].replace("nan",'0'))),
-                    DevAdditionalSignChange=int(float(request_fileData[i]['DeviationAddtionalChange'].replace("nan",'0'))),
-                    DevPostfacto=int(float(request_fileData[i]['DeviationPostfacto'].replace("nan",'0'))),
-                    DevNormal=int(float(request_fileData[i]['DeviationNormal'].replace("nan",'0'))),
-                    DevFinal=int(request_fileData[i]['DeviationFinal'].replace(',','')),
-                    Outstandings=int(request_fileData[i]['DeviationFinal'].replace(',','')),
+                    DevAdditional=int(float(request_fileData[i]['DeviationAddtional'])),
+                    DevAdditionalSignChange=int(float(request_fileData[i]['DeviationAddtionalChange'])),
+                    DevPostfacto=int(float(request_fileData[i]['DeviationPostfacto'])),
+                    DevNormal=int(float(request_fileData[i]['DeviationNormal'])),
+                    DevFinal=int(request_fileData[i]['DeviationFinal']),
+                    Outstandings=int(request_fileData[i]['DeviationFinal']),
                     PayableorReceivable=request_fileData[i]['PayableReceviable'],
                     image_url=Image_url,
                     registration_id=user_register_id
