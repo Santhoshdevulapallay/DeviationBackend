@@ -61,7 +61,7 @@ def validateHtml(request):
         non_users=[]
         
         for i in range(0,len(request_fileData)):
-            user_exists=User.objects.filter(Q(generalentities1__alias1__icontains=request_fileData[i]['Entity'])|Q(generalentities1__alias2__icontains=request_fileData[i]['Entity'])|Q(generalentities1__alias3__icontains=request_fileData[i]['Entity'])|Q(generalentities1__alias4__icontains=request_fileData[i]['Entity'])).all()
+            user_exists=User.objects.filter(Q(generalentities1__alias1=request_fileData[i]['Entity'])|Q(generalentities1__alias2=request_fileData[i]['Entity'])|Q(generalentities1__alias3=request_fileData[i]['Entity'])|Q(generalentities1__alias4=request_fileData[i]['Entity'])).all()
                 
             if len(user_exists)< 1:
                 non_users.append(request_fileData[i]['Entity'])
@@ -190,86 +190,56 @@ def SRPCPdfFile(request):
             popupdata=[]
             
             start=0
-            for tr in table[1].find_all('tr'):
+            for tr in table[0].find_all('tr'):
                 if start==0:
                     start+=1
-                else:
-                    row_wise=[]
-                    row_wise=list(tr.find_all('td'))
-                    if len(row_wise)<2 or row_wise[0].text=='Entity':
-                        continue
-                    else:
-                        states1['Entity']=row_wise[0].text
-                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
-                        states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
-                        states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
-                        states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
-                        states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
-                        states1['PayableReceviable']=row_wise[6].text.replace('--','0')
-                        popupdata.append(states1.copy())
-                
-            second_table=0
-            for tr in table[2].find_all('tr'):
-                if second_table==0:
-                    second_table+=1
                 else:
                     row_wise=[]
                     row_wise=list(tr.find_all('td'))
                     if len(row_wise)<2 or row_wise[0].text=='0':
                         continue
                     else:
-                        print(row_wise[0].text)
-                        states1['Entity']=row_wise[0].text
-                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0').replace('-','0')
-                        states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0').replace('-','0')
-                        states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0').replace('-','0')
-                        states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0').replace('-','0')
-                        states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0').replace('-','0')
-                        states1['PayableReceviable']=row_wise[6].text.replace('--','0')
+                        if row_wise[0].text=='Western Region' or row_wise[0].text=='Eastern Region':
+                            states1['Entity']=row_wise[0].text
+                            states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0').replace('-','0')
+                            states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0').replace('-','0')
+                            states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0').replace('-','0')
+                            states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0').replace('-','0')
+                            states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0').replace('-','0')
+                            states1['PayableReceviable']=row_wise[6].text
+                        else:
+                            states1['Entity']=row_wise[0].text
+                            states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
+                            states1['DeviationAddtionalChange']=row_wise[2].text.replace(',','').replace('--','0')
+                            states1['DeviationPostfacto']=row_wise[3].text.replace(',','').replace('--','0')
+                            states1['DeviationNormal']=row_wise[4].text.replace(',','').replace('--','0')
+                            states1['DeviationFinal']=row_wise[5].text.replace(',','').replace('--','0')
+                            states1['PayableReceviable']=row_wise[6].text
                         popupdata.append(states1.copy())
-                
-            
+               
+           
             third_table=0
-            for tr in table[3].find_all('tr'):
+            for tr in table[1].find_all('tr'):
                 if third_table==0:
                     third_table+=1
                 else:
                     row_wise=[]
                     row_wise=list(tr.find_all('td'))
-                    if len(row_wise)<2 or row_wise[0].text=='Entity':
-                        continue
-                    else:
-                        print(row_wise[0].text)
-                        states1['Entity']=row_wise[0].text
-                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
-                        states1['DeviationAddtionalChange']=0
-                        states1['DeviationPostfacto']=0
-                        states1['DeviationNormal']=row_wise[2].text.replace(',','').replace('--','0')
-                        states1['DeviationFinal']=row_wise[3].text.replace(',','').replace('--','0')
-                        states1['PayableReceviable']=row_wise[4].text.replace('--','0')
-                        popupdata.append(states1.copy())
-            
-            
-            fourth_table=0
-            for tr in table[4].find_all('tr'):
-                if fourth_table==0:
-                    fourth_table+=1
-                else:
-                    row_wise=[]
-                    row_wise=list(tr.find_all('td'))
-                    
                     if len(row_wise)<4 or row_wise[0].text=='':
                         continue
                     else:
                         print(row_wise[0].text)
                         states1['Entity']=row_wise[0].text
-                        states1['DeviationAddtional']=row_wise[1].text.replace(',','').replace('--','0')
+                        states1['DeviationAddtional']=0
                         states1['DeviationAddtionalChange']=0
                         states1['DeviationPostfacto']=0
                         states1['DeviationNormal']=row_wise[2].text.replace(',','').replace('--','0')
                         states1['DeviationFinal']=row_wise[3].text.replace(',','').replace('--','0')
                         states1['PayableReceviable']=row_wise[4].text.replace('--','0')
                         popupdata.append(states1.copy())
+            
+            
+            
              
             context=[
                 {'popup':popupdata}
@@ -385,10 +355,12 @@ def StoreConfigured(request):
             
             request_formData=(json.loads(request.body))['formData']
             request_fileData=(json.loads(request.body))['fileData']
-            
+
+            ConfigureModel.objects.filter(Fin_year=request_formData['year'],Week_no=request_formData['weekNo']).exclude(Q(Entity='Western Region(*wrpc)')| Q(Entity='Eastern Region(*erpc)')).delete()
+
             for i in range(0,len(request_fileData)):
                 
-                reg_id=User.objects.filter(Q(generalentities1__alias1__iexact=request_fileData[i]['Entity'])|Q(generalentities1__alias2__iexact=request_fileData[i]['Entity'])|Q(generalentities1__alias3__iexact=request_fileData[i]['Entity'])|Q(generalentities1__alias4__iexact=request_fileData[i]['Entity'])).values('registration_id')
+                reg_id=User.objects.filter(Q(generalentities1__alias1=request_fileData[i]['Entity'])|Q(generalentities1__alias2=request_fileData[i]['Entity'])|Q(generalentities1__alias3=request_fileData[i]['Entity'])|Q(generalentities1__alias4=request_fileData[i]['Entity'])).values('registration_id')
                 
                 if len(reg_id) <1:
                     user_register_id="SRADMIN"
@@ -657,6 +629,7 @@ def FetchConfiguredInitial(request):
                 else:
                     continue 
         else:
+            
             state_bills=list(ConfigureModel.objects.filter(Fin_year=userData['formdata']['year'],Week_no=userData['formdata']['weekno'],
             PayableorReceivable=userData['formdata']['payorreceive'],registration_id=userData['reg_id']).exclude(Status="Complete").values('id','Entity','Week_no','Revision_no','DevFinal','Outstandings','PayableorReceivable'))        
         generated=[
@@ -1482,7 +1455,8 @@ def Disbursements(request):
             elif  erwr[i]['Entity']=='Eastern Region' and erwr[i]['PayableorReceivable']=='Receivable':
                     for j in range(0,len(erwr)):
                         if erwr[j]['Entity']=='Eastern Region':
-                            newerwr.append(erwr[j])
+                              newerwr.append(erwr[j])
+        
         # Info WR/ER Payable
         info_inter_receivable=[]
         for entity in newerwr:
@@ -1499,7 +1473,8 @@ def Disbursements(request):
                     info_inter_receivable=list(ConfigureModel.objects.filter(Entity='Eastern Region',Fin_year=dis_data['year'],Week_no=dis_data['weekno']).values('id','Week_no','Entity','DevFinal','Outstandings'))
         
         if len(newerwr)>0:
-            disburse_receivable.append(newerwr[0])
+            for i in range(0,len(newerwr)):
+                disburse_receivable.append(newerwr[i])
 
         to_year=int(dis_data['year'][:2]+dis_data['year'][5:])
         previous_total_inpool=DSMDuePool.objects.filter(from_year__lte=dis_data['year'][:4],                to_year__lte=int(str(dis_data['year'][2:4])+str(dis_data['year'][5:7])),
@@ -2511,9 +2486,9 @@ def ImagetoBase64(request):
         if len(approve_auth)>0:
             image_path=list(MOEmployeeUser.objects.filter(empno=approve_auth[0]['review_auth2']).values('image_url','name','designation'))
             
-            with open('E:\\DSM\\Backend\\Deviation\\Registration'+image_path[0]['image_url'], "rb") as image_file:
+            with open('F:\\DSM NEW\\Backend\\DeviationBackend\\Registration'+image_path[0]['image_url'], "rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
-                
+            
             final_encoded_image=[
                     {'encoded_string':False},
                     {'encoded_image':encoded_string},

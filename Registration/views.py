@@ -144,17 +144,17 @@ def EmployeeSign(request):
     try:
         f=request.FILES['file']
         
-        _dir = "Registration/static/images/MO/"  
+        _dir = "Registration\\static\\images\MO\\"  
         name,extension = os.path.splitext(f.name)
         
         
         filename=str(name.split("@")[1].split("$")[1])  # whether DSM,REACTIVE or CONGESTION
-        _dir = _dir+name.split("@")[0]+'/'+name.split("@")[1].split("$")[0]
+        _dir = _dir+name.split("@")[0]+'\\'+name.split("@")[1].split("$")[0]
     
         if not os.path.exists(_dir):
             os.makedirs(_dir)
 
-        path=_dir+'/'+filename+extension  
+        path=_dir+'\\'+filename+extension  
 
         
     
@@ -172,7 +172,7 @@ def GetUsers(request):
     try:
         # u=User.objects.all()
         # users = [str(user) for user in User.objects.all()]
-        usernames = list(User.objects.values_list('username', flat=True))
+        usernames = list(User.objects.order_by('username').values_list('username', flat=True))
         result=usernames
     except Exception as e:
         result=e
@@ -856,9 +856,9 @@ def PendingList(request):
     try:
         if request.method=="POST":
             
-            get_data=request.body.decode("utf-8")
-            
-            if get_data=="SRADMIN" or get_data=="SRFINANCE":
+            get_data=json.loads(request.body)
+           
+            if get_data['reg_id']=="SRADMIN" or get_data['reg_id']=="SRFINANCE":
 
                 rejected_list=list(FormData.objects.filter(status=0).order_by('-latest_record').values_list('entityName','reject_remarks1','reject_remarks2','id'))
 
@@ -866,11 +866,17 @@ def PendingList(request):
                 fin_pending=list(FormData.objects.filter(status=2).order_by('-latest_record').values_list('entityName','id'))
                 approved=list(FormData.objects.filter(status=3).order_by('-latest_record').values_list('entityName','id'))
                 
+                review_auth=list(ApproveAuthority.objects.exclude(status=3).order_by('-id')[:1].all().values())
+
+                disbursed_date=list(DisbursedDate.objects.order_by('-id')[:1].all().values_list())
+
                 summary=[
                     {'rejected_list':rejected_list},
                     {'mo_pending':mo_pending},
                     {'fin_pending':fin_pending},
-                    {'approved':approved}
+                    {'approved':approved},
+                    {'review_auth1':review_auth},
+                    {'disbursed_date':disbursed_date}
                 ]
 
                 # pending_contacts=list(OldDetails.objects.filter(isadminverified=False).all().values())

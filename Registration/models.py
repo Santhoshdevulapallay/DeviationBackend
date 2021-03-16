@@ -9,10 +9,10 @@ class User(AbstractUser):
         return self.registration_id
 
 class EmployeeUser1(models.Model):
-    empno=models.CharField(max_length=50,default=None)
-    name=models.CharField(max_length=100,default=None)
-    email=models.CharField(max_length=100,default=None)
-    designation=models.CharField(max_length=100,default=None)
+    empno=models.CharField(max_length=255,default=None)
+    name=models.CharField(max_length=255,default=None)
+    email=models.CharField(max_length=255,default=None)
+    designation=models.CharField(max_length=255,default=None)
     contact_number=models.BigIntegerField(blank=True,default=None)
     # propose_rights=models.BooleanField(default=False)
     # check_rights=models.BooleanField(default=False)
@@ -24,16 +24,16 @@ class EmployeeUser1(models.Model):
 
 
 class GeneralEntities1(models.Model):
-    alias1 = models.CharField(max_length=30, blank=True,default="null")
-    alias2 = models.CharField(max_length=30, blank=True,default="null")
-    alias3 = models.CharField(max_length=30, blank=True,default="null")
-    alias4 = models.CharField(max_length=30, blank=True,null=True,default="null")
-    fullname=models.CharField(max_length=200,blank=True,default="null")
+    alias1 = models.CharField(max_length=255, blank=True,default="null")
+    alias2 = models.CharField(max_length=255, blank=True,default="null")
+    alias3 = models.CharField(max_length=255, blank=True,default="null")
+    alias4 = models.CharField(max_length=255, blank=True,null=True,default="null")
+    fullname=models.CharField(max_length=255,blank=True,default="null")
     dateofregistration=models.DateField(auto_now=True,blank=True)
-    email=models.CharField(default="test@test.com",max_length=50)
-    shortname=models.CharField(max_length=50,default="null",blank=True)
-    usercategory=models.CharField(max_length=100,default="null")
-    usertype=models.CharField(max_length=100,default="null")
+    email=models.CharField(default="test@test.com",max_length=255)
+    shortname=models.CharField(max_length=255,default="null",blank=True)
+    usercategory=models.CharField(max_length=255,default="null")
+    usertype=models.CharField(max_length=255,default="null")
     mobileno=models.BigIntegerField(default=None)
     registration_id=models.ForeignKey(User,on_delete=models.CASCADE)
     
